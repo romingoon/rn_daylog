@@ -29,9 +29,9 @@ const MainTab = () => {
         tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name='Feeds' component={FeedsScreen} />
-      <Tab.Screen name='Calendar' component={CalendarScreen} />
-      <Tab.Screen name='Search' component={SearchScreen} />
+      <Tab.Screen name='Feeds' component={FeedsScreen} options={{ headerShown: false }} />
+      <Tab.Screen name='Calendar' component={CalendarScreen} options={{ headerShown: false }} />
+      <Tab.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 };
