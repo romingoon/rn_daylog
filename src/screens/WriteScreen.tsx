@@ -1,13 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import WriteEditor from '../components/WriteEditor';
 import WriteHeader from '../components/WriteHeader';
 
 const WriteScreen = () => {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   return (
     <SafeAreaView style={styles.block}>
-      <WriteHeader />
-      <Text>WriteScreen</Text>
+      <KeyboardAvoidingView
+        style={styles.avoidingView}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <WriteHeader />
+        <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -15,7 +23,10 @@ const WriteScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FFF8DC',
+  },
+  avoidingView: {
+    flex: 1,
   },
 });
 

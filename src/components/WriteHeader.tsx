@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Pressable, View, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TransparentCircleButton from './ TransparentCircleButton';
 
 const WriteHeader = () => {
   const navigation = useNavigation();
@@ -13,22 +14,14 @@ const WriteHeader = () => {
   return (
     <View style={styles.block}>
       <View style={styles.iconButtonWrapper}>
-        <Pressable style={styles.iconButton} onPress={onGoBack} android_ripple={{ color: 'white' }}>
-          <Ionicons name='arrow-back-outline' size={24} color='#FB7185' />
-        </Pressable>
+        <TransparentCircleButton onPress={onGoBack} name='arrow-back-outline' color='#FB7185' />
       </View>
       <View style={styles.buttons}>
         <View style={[styles.iconButtonWrapper, styles.marginRight]}>
-          <Pressable style={[styles.iconButton]} android_ripple={{ color: 'white' }}>
-            <Ionicons name='trash-outline' size={24} color='#FB7185' />
-          </Pressable>
+          <TransparentCircleButton name='trash-sharp' color='#FB7185' hasMarginRight />
         </View>
-      </View>
-      <View style={styles.buttons}>
         <View style={[styles.iconButtonWrapper, styles.marginRight]}>
-          <Pressable style={[styles.iconButton]} android_ripple={{ color: 'white' }}>
-            <Ionicons name='checkmark-outline' size={24} color='#FB7185' />
-          </Pressable>
+          <TransparentCircleButton name='checkmark-outline' color='#FB7185' />
         </View>
       </View>
     </View>
