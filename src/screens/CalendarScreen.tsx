@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import LogContext from '../contexts/LogContext';
+
 const CalendarScreen = () => {
-  const { text }: any = useContext(LogContext);
   return (
     <View style={styles.block}>
-      <Text style={styles.text}>text : {text}</Text>
+      <Text> CalendarScreen</Text>
     </View>
   );
 };

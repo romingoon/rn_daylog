@@ -1,19 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import WriteHeader from '../components/WriteHeader';
 
 const WriteScreen = () => {
   return (
-    <View style={styles.block}>
+    <SafeAreaView style={styles.block}>
+      <WriteHeader />
       <Text>WriteScreen</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'white',
   },
 });
 
