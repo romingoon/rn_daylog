@@ -4,7 +4,11 @@ import { Pressable, View, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TransparentCircleButton from './ TransparentCircleButton';
 
-const WriteHeader = () => {
+type WriteHeaderProps = {
+  onSave: () => void;
+};
+
+const WriteHeader = ({ onSave }: WriteHeaderProps) => {
   const navigation = useNavigation();
 
   const onGoBack = () => {
@@ -21,7 +25,7 @@ const WriteHeader = () => {
           <TransparentCircleButton name='trash-sharp' color='#FB7185' hasMarginRight />
         </View>
         <View style={[styles.iconButtonWrapper, styles.marginRight]}>
-          <TransparentCircleButton name='checkmark-outline' color='#FB7185' />
+          <TransparentCircleButton onPress={onSave} name='checkmark-outline' color='#FB7185' />
         </View>
       </View>
     </View>
