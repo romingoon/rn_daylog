@@ -17,7 +17,11 @@ const FeedList = ({ logs }: LogContextType) => {
 
 const styles = StyleSheet.create({
   block: { flex: 1, backgroundColor: '#FFF8DC' },
-  separator: { borderBottomWidth: 1, borderBottomColor: '#DEDEDE' },
+  separator: {
+    backgroudnColor: '#e0e0e0',
+    heigth: 1,
+    width: '100%',
+  },
 });
 
 export default FeedList;
