@@ -26,7 +26,16 @@ const LogContext = createContext<LogContextType>({
 });
 
 export function LogContextProvider({ children }: any) {
-  const [logs, setLogs] = useState<onCreateProps[]>([]);
+  const [logs, setLogs] = useState<onCreateProps[]>(
+    Array.from({ length: 10 })
+      .map((_, index) => ({
+        id: uuidv4(),
+        title: `title ${index}`,
+        body: `body ${index}`,
+        date: new Date().toISOString(),
+      }))
+      .reverse()
+  );
 
   const onCreate = ({ title, body, date }: onCreateProps) => {
     const log: onCreateProps = {

@@ -1,6 +1,21 @@
 import React from 'react';
 import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import { onCreateProps } from '../contexts/LogContext';
+import { format, formatDistanceToNow } from 'date-fns';
+import { ko } from 'date-fns/locale';
+
+const formatDate = (date: Date) => {
+  const d = new Date(date);
+  const now = Date.now();
+  const diff = (now - d.getTime()) / 1000;
+
+  if (diff < 60 * 1) {
+    return '방금 전';
+  } else if (diff < 60 * 60 * 24 * 3) {
+    return formatDistanceToNow(date, { addSuffix: true, locale: ko });
+  }
+  return format(d, 'PPP EEE p', { locale: ko });
+};
 
 const truncate = (text: string) => {
   // 정규식을 사용해 모든 줄 바꿈 문자 제거.
@@ -14,7 +29,7 @@ const truncate = (text: string) => {
 
 const FeedListItem = ({ log }: onCreateProps) => {
   const { title, body, date } = log as onCreateProps;
-
+  const formattedDate = new Date(date);
   return (
     <Pressable
       style={({ pressed }) => [
@@ -25,29 +40,33 @@ const FeedListItem = ({ log }: onCreateProps) => {
     >
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.body}>{truncate(body)}</Text>
-      <Text style={styles.date}>{date}</Text>
+      <Text style={styles.date}>{formatDate(formattedDate)}</Text>
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   block: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
     borderBottomWidth: 1,
     borderBottomColor: '#DEDEDE',
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
+    color: '#52525B',
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   body: {
     fontSize: 14,
-    lineHeight: 20,
+    color: '#37474f',
+    lineHeight: 21,
   },
   date: {
     fontSize: 12,
     color: '#AAAAAA',
+    marginTop: 8,
   },
 });
 
