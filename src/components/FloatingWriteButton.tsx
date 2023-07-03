@@ -1,15 +1,46 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, Animated } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const FloatingWriteButton = () => {
+type FloatingWriteButtonProps = {
+  hidden: boolean;
+};
+const FloatingWriteButton = ({ hidden }: FloatingWriteButtonProps) => {
   const navigation = useNavigation();
 
   const onPress = () => navigation.navigate('Write', []);
 
+  const animation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: hidden ? 1 : 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, [hidden, animation]);
+
   return (
-    <View style={styles.wrapper}>
+    <Animated.View
+      style={[
+        styles.wrapper,
+        {
+          transform: [
+            {
+              translateY: animation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 150],
+              }),
+            },
+          ],
+          opacity: animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0],
+          }),
+        },
+      ]}
+    >
       <Pressable
         style={({ pressed }) => [
           styles.button,
@@ -22,7 +53,7 @@ const FloatingWriteButton = () => {
       >
         <Ionicons name='create-outline' size={24} style={styles.icon} />
       </Pressable>
-    </View>
+    </Animated.View>
   );
 };
 

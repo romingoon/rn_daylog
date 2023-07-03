@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface LogContextType {
   logs: onCreateProps[];
   onCreate: (data: onCreateProps) => void;
+  onScrolledToBottom?: (isBottom: boolean) => void;
 }
 
 export type onCreateProps = {
