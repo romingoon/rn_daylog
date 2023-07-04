@@ -23,7 +23,7 @@ const RootStack = () => {
       <Stack.Screen
         name='MainTab'
         component={MainTab}
-        options={({ route }: any) => ({ title: getHeaderTitle(route) })}
+        options={({ route }: any) => ({ hearderShown: false, title: getHeaderTitle(route) })}
       />
       <Stack.Screen name='Write' component={WriteScreen} options={{ headerShown: false }} />
     </Stack.Navigator>

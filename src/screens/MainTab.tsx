@@ -5,6 +5,7 @@ import FeedsScreen from './FeedsScreen';
 import CalendarScreen from './CalendarScreen';
 import SearchScreen from './SearchScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SearchHeader from '../components/SearchHeader';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +32,14 @@ const MainTab = () => {
     >
       <Tab.Screen name='Feeds' component={FeedsScreen} options={{ headerShown: false }} />
       <Tab.Screen name='Calendar' component={CalendarScreen} options={{ headerShown: false }} />
-      <Tab.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
+      <Tab.Screen
+        name='Search'
+        component={SearchScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => <Ionicons name='search-outline' color={color} size={size} />,
+          headerTitle: () => <SearchHeader />,
+        }}
+      />
     </Tab.Navigator>
   );
 };
