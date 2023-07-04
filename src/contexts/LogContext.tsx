@@ -44,8 +44,6 @@ export function LogContextProvider({ children }: { children: React.ReactNode }) 
       .reverse()
   );
 
-  const onDismiss = () => {};
-
   const onCreate = ({ title, body, date }: LogContextProps) => {
     const log: LogContextProps = {
       id: uuidv4(),
@@ -61,13 +59,6 @@ export function LogContextProvider({ children }: { children: React.ReactNode }) 
   const onModify = (modified: LogContextProps) => {
     const nextLogs = logs.map((log) => (log.id === modified.id ? modified : log));
     setLogs(nextLogs);
-    if (modified.title === '') {
-      useToast('제목을 입력해주세요', 'error');
-      onDismiss();
-    } else if (modified.body === '') {
-      useToast('내용을 입력해주세요.', 'error');
-      onDismiss();
-    }
     useToast('수정되었습니다.', 'success');
   };
 

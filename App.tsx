@@ -4,14 +4,17 @@ import RootStack from './src/screens/RootStack';
 import Toast from 'react-native-toast-message';
 import { LogContextProvider } from './src/contexts/LogContext';
 import ToastConfig from './src/config/ToastConfig';
+import { SearchContextProvider } from './src/contexts/SearchContext';
 
 const App = () => {
   return (
     <NavigationContainer>
-      <LogContextProvider>
-        <RootStack />
-        <Toast config={ToastConfig} />
-      </LogContextProvider>
+      <SearchContextProvider>
+        <LogContextProvider>
+          <RootStack />
+          <Toast config={ToastConfig} />
+        </LogContextProvider>
+      </SearchContextProvider>
     </NavigationContainer>
   );
 };

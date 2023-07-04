@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Pressable, TextInput, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import SearchContext, { SearchContextType } from '../contexts/SearchContext';
+import TransparentCircleButton from './ TransparentCircleButton';
 
 const SearchHeader = () => {
   const { width } = useWindowDimensions();
-  console.log(width);
+  const { keyword, onChangeText } = useContext<SearchContextType>(SearchContext);
 
-  return <View style={[styles.block, { width: width - 32, height: 24 }]} />;
+  return (
+    <View style={[styles.block, { width: width - 16 }]}>
+      <TextInput
+        style={styles.input}
+        placeholder='검색어를 입력하세요'
+        value={keyword}
+        onChangeText={onChangeText}
+        autoFocus
+      />
+      <Pressable
+        style={({ pressed }) => [styles.button, pressed && { opacity: 0.5 }]}
+        onPress={() => onChangeText('')}
+      >
+        <Ionicons name='close-circle' size={24} color='#F43F5E' />
+      </Pressable>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   block: {
-    backgroundColor: '#0078D7',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  input: {
+    flex: 1,
+  },
+  button: {
+    marginLeft: 8,
   },
 });
 
