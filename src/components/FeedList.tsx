@@ -1,14 +1,19 @@
 import React from 'react';
+
 import { FlatList, StyleSheet, View } from 'react-native';
-import { LogContextType } from '../contexts/LogContext';
+import { LogContextType, LogContextProps } from '../contexts/LogContext';
 import FeedListItem from './FeedListItem';
 
 const FeedList = ({ logs, onScrolledToBottom }: LogContextType) => {
   const onScroll = (event: any) => {
+    if (!onScrolledToBottom) {
+      return;
+    }
+
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const distanceFromBottom = contentSize.height - layoutMeasurement.height - contentOffset.y;
 
-    if (distanceFromBottom < 72) {
+    if (contentSize.height > layoutMeasurement.height && distanceFromBottom < 72) {
       onScrolledToBottom && onScrolledToBottom(true);
     } else {
       onScrolledToBottom && onScrolledToBottom(false);
@@ -19,7 +24,7 @@ const FeedList = ({ logs, onScrolledToBottom }: LogContextType) => {
     <FlatList
       data={logs}
       style={styles.block}
-      renderItem={({ item }: any) => <FeedListItem log={item} title={''} body={''} date={''} />}
+      renderItem={({ item }: any) => <FeedListItem log={item} title={''} body={''} date={''} id={''} />}
       keyExtractor={(item: any) => item.id}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       onScroll={onScroll}

@@ -1,25 +1,66 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useContext, useRef } from 'react';
+import { Alert, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WriteEditor from '../components/WriteEditor';
 import WriteHeader from '../components/WriteHeader';
 import LogContext from '../contexts/LogContext';
+import useToast from '../hooks/useToast';
+import { v4 as uuidv4 } from 'uuid';
 
-export const WriteScreen = () => {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+export const WriteScreen = ({ route }: any) => {
+  const log = route.params?.log;
+  const [title, setTitle] = useState(log?.title ?? '');
+  const [body, setBody] = useState(log?.body ?? '');
 
   const navigation = useNavigation();
 
-  const { onCreate } = useContext(LogContext);
+  const { onCreate, onModify, onRemove } = useContext(LogContext);
+
+  const onAskRemove = () => {
+    Alert.alert(
+      '삭제',
+      '정말로 삭제하시겠습니까?',
+      [
+        {
+          text: '취소',
+          style: 'cancel',
+          onPress: () => {
+            useToast('취소되었습니다.', 'info');
+          },
+        },
+        {
+          text: '삭제',
+          onPress: () => {
+            if (onRemove) {
+              onRemove(log?.id);
+              navigation.goBack();
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   const onSave = () => {
-    onCreate({
-      title,
-      body,
-      date: new Date().toISOString(),
-    });
+    if (log) {
+      onModify({
+        id: log.id,
+        date: log.date,
+        title: !!title ? title : '제목 없음',
+        body: !!body ? body : '내용 없음',
+      });
+    } else {
+      onCreate({
+        id: uuidv4(),
+        title: title ? title : '제목 없음',
+        body: body ? body : '내용 없음',
+        date: new Date().toISOString(),
+      });
+    }
+
     navigation.goBack();
   };
 
@@ -29,7 +70,7 @@ export const WriteScreen = () => {
         style={styles.avoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <WriteHeader onSave={onSave} />
+        <WriteHeader onSave={onSave} onAskRemove={onAskRemove} isEditing={!!log} />
         <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} />
       </KeyboardAvoidingView>
     </SafeAreaView>

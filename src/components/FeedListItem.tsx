@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, Pressable, StyleSheet, Text } from 'react-native';
-import { onCreateProps } from '../contexts/LogContext';
+import { useNavigation } from '@react-navigation/native';
+import { LogContextProps } from '../contexts/LogContext';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
@@ -27,9 +28,16 @@ const truncate = (text: string) => {
   return replacedText.slice(0, 100).concat('...');
 };
 
-const FeedListItem = ({ log }: onCreateProps) => {
-  const { title, body, date } = log as onCreateProps;
+const FeedListItem = ({ log }: LogContextProps) => {
+  const { title, body, date } = log as LogContextProps;
+
   const formattedDate = new Date(date);
+
+  const navigation = useNavigation();
+  const onPress = () => {
+    navigation.navigate('Write', { log });
+  };
+
   return (
     <Pressable
       style={({ pressed }) => [
@@ -37,6 +45,7 @@ const FeedListItem = ({ log }: onCreateProps) => {
         Platform.OS === 'ios' && pressed && { backgroundColor: '#efefef' },
       ]}
       android_ripple={{ color: 'white' }}
+      onPress={onPress}
     >
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.body}>{truncate(body)}</Text>

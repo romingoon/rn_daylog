@@ -1,14 +1,15 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Pressable, View, StyleSheet } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View, StyleSheet } from 'react-native';
 import TransparentCircleButton from './ TransparentCircleButton';
 
 type WriteHeaderProps = {
   onSave: () => void;
+  onAskRemove: () => void;
+  isEditing: boolean;
 };
 
-const WriteHeader = ({ onSave }: WriteHeaderProps) => {
+const WriteHeader = ({ onSave, onAskRemove, isEditing }: WriteHeaderProps) => {
   const navigation = useNavigation();
 
   const onGoBack = () => {
@@ -21,12 +22,10 @@ const WriteHeader = ({ onSave }: WriteHeaderProps) => {
         <TransparentCircleButton onPress={onGoBack} name='arrow-back-outline' color='#FB7185' />
       </View>
       <View style={styles.buttons}>
-        <View style={[styles.iconButtonWrapper, styles.marginRight]}>
-          <TransparentCircleButton name='trash-sharp' color='#FB7185' hasMarginRight />
-        </View>
-        <View style={[styles.iconButtonWrapper, styles.marginRight]}>
-          <TransparentCircleButton onPress={onSave} name='checkmark-outline' color='#FB7185' />
-        </View>
+        {isEditing && (
+          <TransparentCircleButton onPress={onAskRemove} name='trash-sharp' color='#FB7185' hasMarginRight />
+        )}
+        <TransparentCircleButton onPress={onSave} name='checkmark-outline' color='#FB7185' />
       </View>
     </View>
   );
