@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import Toast from 'react-native-toast-message';
 import useToast from '../hooks/useToast';
+import logsStorage from '../storages/logsStorage';
 
 export type LogContextType = {
   logs: LogContextProps[];
@@ -17,6 +17,7 @@ export type LogContextProps = {
   title: string;
   body: string;
   date: string;
+  logs?: LogContextProps[];
   log?: {
     id: string;
     title: string;
@@ -33,16 +34,8 @@ const LogContext = createContext<LogContextType>({
 });
 
 export function LogContextProvider({ children }: { children: React.ReactNode }) {
-  const [logs, setLogs] = useState<LogContextProps[]>(
-    Array.from({ length: 10 })
-      .map((_, index) => ({
-        id: uuidv4(),
-        title: `title ${index}`,
-        body: `body ${index}`,
-        date: new Date().toISOString(),
-      }))
-      .reverse()
-  );
+  const initailLogsRef = useRef(null);
+  const [logs, setLogs] = useState<LogContextProps[]>([]);
 
   const onCreate = ({ title, body, date }: LogContextProps) => {
     const log: LogContextProps = {
@@ -67,6 +60,22 @@ export function LogContextProvider({ children }: { children: React.ReactNode }) 
     setLogs(nextLogs);
     useToast('삭제되었습니다.', 'success');
   };
+
+  useEffect(() => {
+    //useEffect 내에서 async 함수를 만들고 바로 호출하는 패턴
+    (async () => {
+      const savedLogs = await logsStorage.getLogs();
+      if (savedLogs) {
+        initailLogsRef.current = savedLogs;
+        setLogs(savedLogs);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (logs === initailLogsRef.current) return;
+    logsStorage.setLogs(logs);
+  }, [logs]);
 
   return <LogContext.Provider value={{ logs, onCreate, onModify, onRemove }}>{children}</LogContext.Provider>;
 }

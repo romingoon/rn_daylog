@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { LogContextType, LogContextProps } from '../contexts/LogContext';
 import FeedListItem from './FeedListItem';
 
-const FeedList = ({ logs, onScrolledToBottom }: LogContextType) => {
+const FeedList = ({ logs, onScrolledToBottom, ListHeaderComponent }: any) => {
   const onScroll = (event: any) => {
     if (!onScrolledToBottom) {
       return;
@@ -28,6 +28,7 @@ const FeedList = ({ logs, onScrolledToBottom }: LogContextType) => {
       keyExtractor={(item: any) => item.id}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       onScroll={onScroll}
+      ListHeaderComponent={ListHeaderComponent}
     />
   );
 };

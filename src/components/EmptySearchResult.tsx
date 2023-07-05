@@ -9,10 +9,10 @@ const message: messageType = {
   EMPTY_KEYWORD: '검색어를 입력해주세요.',
 };
 
-const EmptySearchResult = ({ Type }: messageType) => {
+const EmptySearchResult = ({ type }: messageType) => {
   return (
     <View style={styles.block}>
-      <Text style={styles.text}>{message[Type]}</Text>
+      <Text style={styles.text}>{message[type]}</Text>
     </View>
   );
 };

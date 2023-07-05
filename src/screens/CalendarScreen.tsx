@@ -1,65 +1,32 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Animated, Button, View, Text, StyleSheet } from 'react-native';
+import React, { useContext, useState, useMemo } from 'react';
+import { format } from 'date-fns';
+import CalendarView from '../components/CalendarView';
+import LogContext, { LogContextType } from '../contexts/LogContext';
+import FeedList from '../components/FeedList';
 
-const SlideLeftAndRight = () => {
-  const animation = useRef(new Animated.Value(0)).current;
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    Animated.timing(animation, {
-      toValue: enabled ? 1 : 0,
-      useNativeDriver: false,
-    }).start();
-  }, [enabled, animation]);
-
-  return (
-    <View>
-      <Animated.View
-        style={[
-          styles.box,
-          {
-            transform: [
-              {
-                translateX: animation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 150],
-                }),
-              },
-            ],
-            opacity: animation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0.5],
-            }),
-          },
-        ]}
-      />
-      <Button title='Toggle' onPress={() => setEnabled(!enabled)} />
-    </View>
-  );
-};
 const CalendarScreen = () => {
+  const { logs } = useContext<LogContextType>(LogContext);
+  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const filteredLogs = logs.filter((log) => format(new Date(log.date), 'yyyy-MM-dd') === selectedDate);
+
+  const markedDates = useMemo(
+    () =>
+      logs.reduce((acc: any, log: any) => {
+        const formattedDate = format(new Date(log.date), 'yyyy-MM-dd');
+        acc[formattedDate] = { marked: true };
+        return acc;
+      }, {}),
+    [logs]
+  );
+
   return (
-    <View style={styles.block}>
-      <Text> CalendarScreen</Text>
-      <SlideLeftAndRight />
-    </View>
+    <FeedList
+      logs={filteredLogs}
+      ListHeaderComponent={
+        <CalendarView markedDates={markedDates} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      }
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  block: {
-    flex: 1,
-  },
-  text: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    padding: 16,
-  },
-  box: {
-    width: 100,
-    height: 100,
-    backgroundColor: 'blue',
-  },
-});
 
 export default CalendarScreen;

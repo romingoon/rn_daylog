@@ -12,7 +12,7 @@ export const WriteScreen = ({ route }: any) => {
   const log = route.params?.log;
   const [title, setTitle] = useState(log?.title ?? '');
   const [body, setBody] = useState(log?.body ?? '');
-
+  const [date, setDate] = useState(log ? new Date(log.date) : new Date());
   const navigation = useNavigation();
 
   const { onCreate, onModify, onRemove } = useContext(LogContext);
@@ -48,7 +48,7 @@ export const WriteScreen = ({ route }: any) => {
     if (log) {
       onModify({
         id: log.id,
-        date: log.date,
+        date: date.toISOString(),
         title: !!title ? title : '제목 없음',
         body: !!body ? body : '내용 없음',
       });
@@ -57,7 +57,7 @@ export const WriteScreen = ({ route }: any) => {
         id: uuidv4(),
         title: title ? title : '제목 없음',
         body: body ? body : '내용 없음',
-        date: new Date().toISOString(),
+        date: date.toISOString(),
       });
     }
 
@@ -70,7 +70,13 @@ export const WriteScreen = ({ route }: any) => {
         style={styles.avoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <WriteHeader onSave={onSave} onAskRemove={onAskRemove} isEditing={!!log} />
+        <WriteHeader
+          onSave={onSave}
+          onAskRemove={onAskRemove}
+          isEditing={!!log}
+          date={date}
+          onChangeDate={setDate}
+        />
         <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} />
       </KeyboardAvoidingView>
     </SafeAreaView>
